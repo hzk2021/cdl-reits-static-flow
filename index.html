@@ -1,387 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>REIT Reports Dashboard</title>
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      /* ------------------------------------------------------
-         CSS Variables & Base Styles
-      ------------------------------------------------------ */
-      :root {
-        --primary: #1e293b; /* Dark blue-gray */
-        --primary-hover: #0f172a; /* Darker blue-gray */
-        --accent: #38bdf8; /* Light blue accent */
-        --background: #f1f5f9; /* Light gray background */
-        --card-bg: #ffffff;
-        --text: #111827;
-        --border: #e2e8f0;
-        --radius: 8px;
-        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        --transition: 0.3s;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        font-family: "Roboto", sans-serif;
-        margin: 0;
-        background: var(--background);
-        color: var(--text);
-        padding: 24px;
-      }
-      h1,
-      h2 {
-        color: var(--primary);
-        margin-top: 0;
-        font-weight: 500;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <title>REIT Reports Dashboard</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ------------------------------------------------------
+       CSS Variables & Base Styles
+    ------------------------------------------------------ */
+    :root {
+      --primary: #1e293b;
+      --primary-hover: #0f172a;
+      --accent: #38bdf8;
+      --background: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --border: #e2e8f0;
+      --radius: 8px;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: 0.3s;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Roboto", sans-serif;
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      padding: 24px;
+    }
+    h1, h2 {
+      color: var(--primary);
+      margin-top: 0;
+      font-weight: 500;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
 
-      /* ------------------------------------------------------
-         Tab Navigation
-      ------------------------------------------------------ */
-      .tab-nav {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 24px;
-      }
-      .tab-nav button {
-        padding: 12px 20px;
-        background-color: var(--primary);
-        color: #fff;
-        border: none;
-        border-radius: var(--radius);
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color var(--transition);
-      }
-      .tab-nav button:hover {
-        background-color: var(--primary-hover);
-      }
-      .tab-nav button.active {
-        background-color: var(--primary-hover);
-      }
-      .tab-content {
-        display: none;
-      }
-      .tab-content.active {
-        display: block;
-      }
+    /* ------------------------------------------------------
+       Clear Storage Button (Fixed at top right)
+    ------------------------------------------------------ */
+    #clearStorageButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1100;
+    }
 
-      /* ------------------------------------------------------
-         Inputs & Buttons
-      ------------------------------------------------------ */
-      .button {
-        background-color: var(--primary);
-        color: #fff;
-        border: none;
-        padding: 8px 12px;
-        border-radius: var(--radius);
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color var(--transition);
-        margin: 4px;
-      }
-      .button:hover {
-        background-color: var(--primary-hover);
-      }
-      input[type="text"],
-      select {
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 16px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        font-size: 16px;
-      }
+    /* ------------------------------------------------------
+       Tab Navigation
+    ------------------------------------------------------ */
+    .tab-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .tab-nav button {
+      padding: 12px 20px;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color var(--transition);
+    }
+    .tab-nav button:hover { background-color: var(--primary-hover); }
+    .tab-nav button.active { background-color: var(--primary-hover); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-      /* ------------------------------------------------------
-         Card Containers
-      ------------------------------------------------------ */
-      .card {
-        background: var(--card-bg);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 24px;
-        margin-bottom: 24px;
-      }
+    /* ------------------------------------------------------
+       Inputs & Buttons
+    ------------------------------------------------------ */
+    .button {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color var(--transition);
+      margin: 4px;
+      align-self: center;
+    }
+    .button:hover { background-color: var(--primary-hover); }
+    input[type="text"], select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 16px;
+    }
 
-      /* ------------------------------------------------------
-         Table Styling
-      ------------------------------------------------------ */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background: var(--card-bg);
-        border-radius: var(--radius);
-        overflow: hidden;
-        box-shadow: var(--shadow);
-        margin-bottom: 24px;
-      }
-      th,
-      td {
-        padding: 16px;
-        border-bottom: 1px solid var(--border);
-        text-align: left;
-        font-size: 16px;
-      }
-      th {
-        background-color: var(--primary);
-        color: #fff;
-      }
-      /* Make links look like traditional hyperlinks */
-      td a {
-        color: var(--primary);
-        text-decoration: underline;
-        font-weight: 500;
-        transition: color var(--transition);
-      }
-      td a:hover {
-        color: var(--primary-hover);
-      }
+    /* ------------------------------------------------------
+       Spinner for Annual Report Loading
+    ------------------------------------------------------ */
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+      display: none;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-      /* ------------------------------------------------------
-         Edit Mode Styling
-      ------------------------------------------------------ */
-      .editing {
-        background-color: #e0f7ff;
-        border-left: 6px solid var(--accent);
-        transition: background-color var(--transition),
-          border-left var(--transition);
-      }
-      .editing td {
-        border: 1px dashed var(--accent);
-      }
-      .editing td:first-child::before {
-        content: "✏️";
-        margin-right: 8px;
-        vertical-align: middle;
-      }
+    /* ------------------------------------------------------
+       Card Containers
+    ------------------------------------------------------ */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
 
-      /* ------------------------------------------------------
-         Extraction Results Section (Overview Tab)
-      ------------------------------------------------------ */
-      #extractionResultsSection {
-        margin-top: 24px;
-        display: none;
-      }
-      #extractionResultsSection table {
-        margin-top: 16px;
-      }
+    /* ------------------------------------------------------
+       Table Styling & Responsiveness
+    ------------------------------------------------------ */
+    .table-responsive { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    th, td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 16px;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    th { background-color: var(--primary); color: #fff; }
+    td a {
+      color: var(--primary);
+      text-decoration: underline;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    td a:hover { color: var(--primary-hover); }
 
-      /* ------------------------------------------------------
-         PDF Preview Container
-      ------------------------------------------------------ */
-      #pdfPreviewContainer {
-        margin-top: 24px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 16px;
-        background: var(--card-bg);
-        display: none;
-        position: relative;
-      }
-      #pdfPreviewContainer iframe {
-        width: 100%;
-        height: 600px;
-        border: none;
-      }
-      #pdfPreviewContainer .close-preview {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        padding: 8px 12px;
-        background-color: var(--primary);
-        color: #fff;
-        border: none;
-        border-radius: var(--radius);
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color var(--transition);
-      }
-      #pdfPreviewContainer .close-preview:hover {
-        background-color: var(--primary-hover);
-      }
+    /* ------------------------------------------------------
+       Edit Mode Styling
+    ------------------------------------------------------ */
+    .editing {
+      background-color: #e0f7ff;
+      border-left: 6px solid var(--accent);
+      transition: background-color var(--transition), border-left var(--transition);
+    }
+    .editing td { border: 1px dashed var(--accent); }
+    .editing td:first-child::before {
+      content: "✏️";
+      margin-right: 8px;
+      vertical-align: middle;
+    }
 
-      /* ------------------------------------------------------
-         Modal for Adding New REIT
-      ------------------------------------------------------ */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-      }
-      .modal-content {
-        background: var(--card-bg);
-        margin: 10% auto;
-        padding: 24px;
-        width: 400px;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-      }
-      .modal-content label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-      }
-      .modal-content input[type="text"],
-      .modal-content input[type="file"] {
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 16px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-      }
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        margin-top: -8px;
-      }
-      .close:hover,
-      .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-      }
+    /* ------------------------------------------------------
+       Extraction Results Section
+    ------------------------------------------------------ */
+    #extractionResultsSection { margin-top: 24px; display: none; }
+    #extractionResultsSection table { margin-top: 16px; }
 
-      /* ------------------------------------------------------
-         Annual Report Tab Specific Styles
-      ------------------------------------------------------ */
-      #annualSearchSection label {
-        font-weight: 500;
-      }
-      .checkbox-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 16px;
-      }
-      .checkbox-container label {
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-      }
-      .checkbox-container input[type="checkbox"] {
-        margin-right: 8px;
-      }
-      /* For list-style search results in Annual Report tab */
-      .annual-results {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      .annual-results li {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 12px;
-        margin-bottom: 8px;
-        transition: background var(--transition);
-      }
-      .annual-results li:hover {
-        background: #f0f4f8;
-      }
-      /* Preview Cards (if used) */
-      #annualReportPreview {
-        margin-top: 24px;
-      }
-      .preview-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 16px;
-        margin-bottom: 16px;
-        box-shadow: var(--shadow);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .preview-card h3 {
-        margin: 0;
-        font-size: 18px;
-      }
-      .preview-actions {
-        display: flex;
-        gap: 12px;
-      }
-      .preview-actions button,
-      .preview-actions a {
-        padding: 10px 16px;
-        background-color: var(--primary);
-        color: #fff;
-        border: none;
-        border-radius: var(--radius);
-        font-weight: 500;
-        text-decoration: none;
-        cursor: pointer;
-        transition: background-color var(--transition);
-      }
-      .preview-actions button:hover,
-      .preview-actions a:hover {
-        background-color: var(--primary-hover);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>REIT Reports Dashboard</h1>
+    /* ------------------------------------------------------
+       PDF Preview Container
+    ------------------------------------------------------ */
+    #pdfPreviewContainer {
+      margin-top: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: var(--card-bg);
+      display: none;
+      position: relative;
+    }
+    #pdfPreviewContainer iframe { width: 100%; height: 600px; border: none; }
+    #pdfPreviewContainer .close-preview {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 8px 12px;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color var(--transition);
+    }
+    #pdfPreviewContainer .close-preview:hover { background-color: var(--primary-hover); }
 
-      <!-- Tab Navigation -->
-      <div class="tab-nav">
-        <button id="btnOverview" class="active" onclick="showTab('overview')">
-          REITs Overview
-        </button>
-        <button id="btnAnnual" onclick="showTab('annual')">
-          Annual Report
-        </button>
+    /* ------------------------------------------------------
+       Modal Styles (Hidden on Load)
+    ------------------------------------------------------ */
+    .modal {
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 24px;
+      width: 400px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .modal-content label { display: block; margin-bottom: 8px; font-weight: 500; }
+    .modal-content input[type="text"],
+    .modal-content input[type="file"],
+    .modal-content select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: -8px;
+    }
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* ------------------------------------------------------
+       Annual Report Tab Specific Styles
+    ------------------------------------------------------ */
+    #annualSearchSection label { font-weight: 500; }
+    #annualSearchSection select#annualQuarterSelect {
+      width: auto;
+      min-width: 150px;
+      max-width: 300px;
+    }
+
+    /* ------------------------------------------------------
+       Additional: Upload Form Layout in Actions Cell
+    ------------------------------------------------------ */
+    .upload-form {
+      display: none;
+      margin-top: 10px;
+      padding: 8px;
+      background: #f9f9f9;
+      border: 1px solid var(--border);
+    }
+    .upload-form label,
+    .upload-form select,
+    .upload-form input[type="file"],
+    .upload-form button {
+      display: block;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+    .upload-form button {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Clear Local Storage Button (Fixed at Top Right) -->
+  <button id="clearStorageButton" class="button" onclick="clearLocalStorage()">Clear Local Storage</button>
+  
+  <div class="container">
+    <h1>REIT Reports Dashboard</h1>
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+      <button id="btnOverview" class="active" onclick="showTab('overview')">REITs Overview</button>
+      <button id="btnAnnual" onclick="showTab('annual')">Annual Report</button>
+    </div>
+
+    <!-- REITs Overview Tab -->
+    <div id="tabOverview" class="tab-content active">
+      <!-- Search Container: Input and Add REIT button -->
+      <div class="search-container" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="flex: 1; margin-right: 10px;">
+          <input type="text" id="reitSearch" placeholder="Search REIT by name..." onkeyup="filterTable()" />
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="button" onclick="openAddReitModal()">Add REIT</button>
+        </div>
       </div>
 
-      <!-- REITs Overview Tab -->
-      <div id="tabOverview" class="tab-content active">
-        <!-- Search and Add REIT Options -->
-        <div class="search-container">
-          <div style="flex: 1; margin-right: 10px">
-            <input
-              type="text"
-              id="reitSearch"
-              placeholder="Search REIT by name..."
-              onkeyup="filterTable()"
-            />
-          </div>
-          <div style="display: flex; gap: 10px">
-            <button class="button" onclick="openAddReitModal()">
-              Add REIT
-            </button>
-            <div id="extractionButtonContainer" style="display: none">
-              <button class="button" onclick="extractSelectedData()">
-                Extract Selected Data
-              </button>
-            </div>
-          </div>
-        </div>
+      <!-- "Scrape REIT Reports" Container (visible when at least one checkbox is checked) -->
+      <div id="scrapeContainer" class="scrape-container" style="margin-bottom: 24px; display: none;">
+        <button class="button" onclick="openScrapeModal()">Scrape REIT Report(s)</button>
+      </div>
 
-        <!-- REITs Overview Table -->
+      <!-- REITs Overview Table -->
+      <div class="table-responsive">
         <table id="reitTable">
           <thead>
             <tr>
               <th>Select</th>
               <th>REIT</th>
               <th>Base URL</th>
+              <th>Sector</th>
+              <th>Fiscal Year End (FY End)</th>
               <th>Q1 Report</th>
               <th>Q2 Report</th>
               <th>Q3 Report</th>
@@ -390,55 +325,25 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <!-- Sample rows with empty Q1–Q4 cells -->
+            <tr data-id="1">
               <td>
-                <input
-                  type="checkbox"
-                  class="extract-checkbox"
-                  onchange="updateExtractionButtonVisibility()"
-                />
+                <input type="checkbox" class="extract-checkbox" onchange="updateExtractionButtonVisibility()" />
               </td>
               <td contenteditable="false">Keppel</td>
+              <td><a href="http://www.keppel.com" target="_blank">www.keppel.com</a></td>
+              <td contenteditable="false">Commercial</td>
+              <td contenteditable="false">December</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>
-                <a href="http://www.keppel.com" target="_blank"
-                  >www.keppel.com</a
-                >
-              </td>
-              <td>
-                <a
-                  href="downloads/Annual_Report_for_Keppel_Q1.pdf"
-                  target="_blank"
-                  title="Simulated saved report"
-                  >Q1 Financial Report</a
-                >
-              </td>
-              <td>1H Financial Report</td>
-              <td>
-                <a
-                  href="downloads/Annual_Report_for_Keppel_Q3.pdf"
-                  target="_blank"
-                  title="Simulated saved report"
-                  >Q3 Financial Report</a
-                >
-              </td>
-              <td>2H Report</td>
-              <td>
-                <button class="button" onclick="toggleEditREIT(this)">
-                  Edit
-                </button>
-                <button class="button" onclick="deleteREIT(this)">
-                  Delete
-                </button>
-                <button class="button" onclick="toggleUploadForm(this)">
-                  Upload Report
-                </button>
-                <div
-                  class="upload-form"
-                  style="display: none; margin-top: 10px"
-                >
-                  <label style="display: inline-block; margin-right: 10px">
-                    Select Quarter:
-                  </label>
+                <button class="button" onclick="toggleEditREIT(this)">Edit</button>
+                <button class="button" onclick="deleteREIT(this)">Delete</button>
+                <button class="button" onclick="toggleUploadForm(this)">Upload Report</button>
+                <div class="upload-form">
+                  <label>Select Quarter:</label>
                   <select class="upload-quarter">
                     <option value="Q1">Q1</option>
                     <option value="Q2">Q2</option>
@@ -446,34 +351,57 @@
                     <option value="Q4">Q4</option>
                   </select>
                   <input type="file" class="upload-input" />
-                  <button class="button" onclick="uploadNewReport(this)">
-                    Submit
-                  </button>
-                  <button class="button" onclick="cancelUpload(this)">
-                    Cancel
-                  </button>
-                  <span
-                    class="upload-status"
-                    style="display: none; margin-left: 10px"
-                    >Uploading...</span
-                  >
+                  <button class="button" onclick="uploadNewReport(this)">Submit</button>
+                  <button class="button" onclick="cancelUpload(this)">Cancel</button>
+                  <span class="upload-status" style="display: none; margin-left: 10px;">Uploading...</span>
+                </div>
+              </td>
+            </tr>
+            <tr data-id="2">
+              <td>
+                <input type="checkbox" class="extract-checkbox" onchange="updateExtractionButtonVisibility()" />
+              </td>
+              <td contenteditable="false">CapitaLand</td>
+              <td><a href="http://www.capitaland.com" target="_blank">www.capitaland.com</a></td>
+              <td contenteditable="false">Retail</td>
+              <td contenteditable="false">June</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <button class="button" onclick="toggleEditREIT(this)">Edit</button>
+                <button class="button" onclick="deleteREIT(this)">Delete</button>
+                <button class="button" onclick="toggleUploadForm(this)">Upload Report</button>
+                <div class="upload-form">
+                  <label>Select Quarter:</label>
+                  <select class="upload-quarter">
+                    <option value="Q1">Q1</option>
+                    <option value="Q2">Q2</option>
+                    <option value="Q3">Q3</option>
+                    <option value="Q4">Q4</option>
+                  </select>
+                  <input type="file" class="upload-input" />
+                  <button class="button" onclick="uploadNewReport(this)">Submit</button>
+                  <button class="button" onclick="cancelUpload(this)">Cancel</button>
+                  <span class="upload-status" style="display: none; margin-left: 10px;">Uploading...</span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
 
-        <!-- Extraction Results Section -->
-        <div id="extractionResultsSection">
-          <label for="displayQuarter">
-            Select Quarter to Display Extraction Results:
-          </label>
-          <select id="displayQuarter" onchange="updateExtractionResultsTable()">
-            <option value="Q1">Q1</option>
-            <option value="Q2">Q2</option>
-            <option value="Q3">Q3</option>
-            <option value="Q4">Q4</option>
-          </select>
+      <!-- Extraction Results Section -->
+      <div id="extractionResultsSection">
+        <label for="displayQuarter">Select Quarter to Display Extraction Results:</label>
+        <select id="displayQuarter" onchange="updateExtractionResultsTable()">
+          <option value="Q1">Q1</option>
+          <option value="Q2">Q2</option>
+          <option value="Q3">Q3</option>
+          <option value="Q4">Q4</option>
+        </select>
+        <div class="table-responsive">
           <table id="extractionResultsTable">
             <thead>
               <tr>
@@ -482,62 +410,56 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Extraction results populated dynamically -->
+              <!-- Extraction results will be appended here -->
             </tbody>
           </table>
         </div>
       </div>
+    </div>
 
-      <!-- Annual Report Tab -->
-      <div id="tabAnnual" class="tab-content">
-        <!-- Annual Report Search Section -->
-        <div class="card" id="annualSearchSection">
-          <h2>Search Annual Report</h2>
-          <label for="annualReitSearch">Search REIT:</label>
-          <input
-            type="text"
-            id="annualReitSearch"
-            placeholder="Type to filter REITs..."
-            onkeyup="filterAnnualReits()"
-          />
-          <div class="checkbox-container" id="annualReitContainer">
-            <label><input type="checkbox" value="Keppel" /> Keppel</label>
-            <label
-              ><input type="checkbox" value="CapitaLand" /> CapitaLand</label
-            >
-            <label><input type="checkbox" value="Mapletree" /> Mapletree</label>
-          </div>
-          <label for="annualSelectQuarter">Select Quarter:</label>
-          <select id="annualSelectQuarter">
-            <option value="Q1">Q1</option>
-            <option value="Q2">Q2</option>
-            <option value="Q3">Q3</option>
-            <option value="Q4">Q4</option>
-          </select>
-          <button
-            type="button"
-            class="button"
-            onclick="searchAnnualReport()"
-            style="margin-top: 10px"
-          >
-            Search Annual Report
-          </button>
+    <!-- Annual Report Tab -->
+    <div id="tabAnnual" class="tab-content">
+      <div class="card" id="annualSearchSection">
+        <h2>Annual Report Metrics</h2>
+        <label for="annualQuarterSelect">Select Year & Quarter:</label>
+        <select id="annualQuarterSelect">
+          <option value="2023 Q1">2023 Q1</option>
+          <option value="2023 Q2">2023 Q2</option>
+          <option value="2023 Q3">2023 Q3</option>
+          <option value="2023 Q4">2023 Q4</option>
+        </select>
+        <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center;">
+          <button class="button" onclick="searchAnnualReport()">Search Annual Report</button>
+          <button class="button" onclick="extractMetrics()">Extract Metrics</button>
         </div>
-
-        <!-- Annual Report Search Results as a List -->
-        <div class="card" id="annualPreviewSection">
-          <h2>Annual Report Search Results</h2>
-          <!-- The search results will be rendered as a list -->
-          <ul id="annualReportPreview" class="annual-results"></ul>
+      </div>
+      <div class="card" id="annualExtractionSection">
+        <h2>Extracted Annual Report Metrics</h2>
+        <!-- Spinner placed above the metrics table -->
+        <div id="annualSpinner" class="spinner"></div>
+        <div class="table-responsive">
+          <table id="annualExtractionResultsTable">
+            <thead>
+              <tr>
+                <th>REIT</th>
+                <th>Quarter</th>
+                <th>Committed Occupancy</th>
+                <th>Retention Rate</th>
+                <th>Rental Reversion</th>
+                <th>WALE NLA</th>
+                <th>WALE GRI</th>
+                <th>NPI Margin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Metric rows will be appended here -->
+            </tbody>
+          </table>
         </div>
-
-        <!-- Inline PDF Preview Container -->
-        <div id="pdfPreviewContainer">
-          <button class="close-preview" onclick="closePdfPreview()">
-            Close Preview
-          </button>
-          <iframe id="pdfPreviewFrame" src=""></iframe>
-        </div>
+      </div>
+      <div id="pdfPreviewContainer">
+        <button class="close-preview" onclick="closePdfPreview()">Close Preview</button>
+        <iframe id="pdfPreviewFrame" src=""></iframe>
       </div>
     </div>
 
@@ -551,6 +473,24 @@
           <input type="text" id="newReitName" required />
           <label for="newReitUrl">Base URL:</label>
           <input type="text" id="newReitUrl" required />
+          <label for="newReitSector">Sector:</label>
+          <input type="text" id="newReitSector" value="Commercial" required />
+          <label for="newReitFYEnd">Fiscal Year End (FY End):</label>
+          <select id="newReitFYEnd" required>
+            <option value="">Select Month</option>
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December" selected>December</option>
+          </select>
           <label for="newReitQ1">Optional: Q1 Report Upload:</label>
           <input type="file" id="newReitQ1" />
           <label for="newReitQ2">Optional: Q2 Report Upload:</label>
@@ -564,13 +504,80 @@
       </div>
     </div>
 
-    <!-- JavaScript -->
-    <script>
-      /* ----------------------------
-         Global Variables & Tab Switching
-      ----------------------------- */
-      let extractedResults = {};
+    <!-- Modal for Scraping REIT Reports -->
+    <div id="scrapeModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeScrapeModal()">&times;</span>
+        <h2>Scrape REIT Reports</h2>
+        <label for="modalScrapeQuarter">Select Quarter:</label>
+        <select id="modalScrapeQuarter">
+          <option value="Q1">Q1</option>
+          <option value="Q2">Q2</option>
+          <option value="Q3">Q3</option>
+          <option value="Q4">Q4</option>
+        </select>
+        <button class="button" onclick="confirmScrape()">Scrape</button>
+        <button class="button" onclick="closeScrapeModal()">Cancel</button>
+      </div>
+    </div>
 
+    <script>
+      // Utility: Generate unique ID based on timestamp
+      function generateId() {
+        return Date.now().toString();
+      }
+
+      // --- Update Scrape Button Visibility ---
+      function updateExtractionButtonVisibility() {
+        const checkboxes = document.querySelectorAll("input.extract-checkbox");
+        let anyChecked = false;
+        checkboxes.forEach(cb => { if (cb.checked) anyChecked = true; });
+        document.getElementById("scrapeContainer").style.display = anyChecked ? "block" : "none";
+      }
+
+      // --- Load Scraped Data from localStorage ---
+      function loadScrapedData() {
+        let scrapedData = JSON.parse(localStorage.getItem("scrapedData") || "{}");
+        let table = document.getElementById("reitTable").getElementsByTagName("tbody")[0];
+        for (let i = 0; i < table.rows.length; i++) {
+          let row = table.rows[i];
+          let id = row.getAttribute("data-id");
+          if (scrapedData[id]) {
+            const quarterMapping = { Q1: 5, Q2: 6, Q3: 7, Q4: 8 };
+            for (let quarter in quarterMapping) {
+              let cellIndex = quarterMapping[quarter];
+              if (scrapedData[id][quarter]) {
+                row.cells[cellIndex].innerHTML = scrapedData[id][quarter];
+              }
+            }
+          }
+        }
+      }
+
+      // --- Load Extracted Metrics from localStorage ---
+      function loadExtractedMetrics() {
+        let extractedMetrics = JSON.parse(localStorage.getItem("extractedMetrics") || "[]");
+        let tableBody = document.getElementById("annualExtractionResultsTable").getElementsByTagName("tbody")[0];
+        extractedMetrics.forEach(item => {
+          let row = document.createElement("tr");
+          row.innerHTML = `<td>${item.name}</td>
+                           <td>${item.quarter}</td>
+                           <td>${item.committed_occupancy}</td>
+                           <td>${item.retention_rate}</td>
+                           <td>${item.rental_reversion}</td>
+                           <td>${item.wale_nla}</td>
+                           <td>${item.wale_gri}</td>
+                           <td>${item.npi_margin}</td>`;
+          tableBody.appendChild(row);
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        loadScrapedData();
+        loadExtractedMetrics();
+      });
+
+      // --- Tab Switching ---
       function showTab(tabName) {
         document.getElementById("tabOverview").classList.remove("active");
         document.getElementById("tabAnnual").classList.remove("active");
@@ -585,11 +592,9 @@
         }
       }
 
-      /* ----------------------------
-         Modal Functions for Adding New REIT
-      ----------------------------- */
-      function openAddReitModal() {
-        document.getElementById("addReitModal").style.display = "block";
+      // --- Add REIT Modal Functions ---
+      function openAddReitModal() { 
+        document.getElementById("addReitModal").style.display = "flex"; 
       }
       function closeAddReitModal() {
         document.getElementById("addReitModal").style.display = "none";
@@ -599,71 +604,41 @@
         event.preventDefault();
         const reitName = document.getElementById("newReitName").value.trim();
         const reitUrl = document.getElementById("newReitUrl").value.trim();
-        if (!reitName || !reitUrl) return;
-
+        const reitSector = document.getElementById("newReitSector").value.trim();
+        const reitFYEnd = document.getElementById("newReitFYEnd").value;
+        if (!reitName || !reitUrl || !reitSector || !reitFYEnd) return;
         let q1Link = "";
         let q2Link = "";
         let q3Link = "";
         let q4Link = "";
         const q1File = document.getElementById("newReitQ1").files[0];
-        if (q1File) {
-          q1Link = `downloads/Annual_Report_for_${encodeURIComponent(
-            reitName
-          )}_Q1.pdf`;
-        }
+        if (q1File) { q1Link = `downloads/Annual_Report_for_${encodeURIComponent(reitName)}_Q1.pdf`; }
         const q2File = document.getElementById("newReitQ2").files[0];
-        if (q2File) {
-          q2Link = `downloads/Annual_Report_for_${encodeURIComponent(
-            reitName
-          )}_Q2.pdf`;
-        }
+        if (q2File) { q2Link = `downloads/Annual_Report_for_${encodeURIComponent(reitName)}_Q2.pdf`; }
         const q3File = document.getElementById("newReitQ3").files[0];
-        if (q3File) {
-          q3Link = `downloads/Annual_Report_for_${encodeURIComponent(
-            reitName
-          )}_Q3.pdf`;
-        }
+        if (q3File) { q3Link = `downloads/Annual_Report_for_${encodeURIComponent(reitName)}_Q3.pdf`; }
         const q4File = document.getElementById("newReitQ4").files[0];
-        if (q4File) {
-          q4Link = `downloads/Annual_Report_for_${encodeURIComponent(
-            reitName
-          )}_Q4.pdf`;
-        }
-
-        const table = document
-          .getElementById("reitTable")
-          .getElementsByTagName("tbody")[0];
+        if (q4File) { q4Link = `downloads/Annual_Report_for_${encodeURIComponent(reitName)}_Q4.pdf`; }
+        const newId = generateId();
+        const table = document.getElementById("reitTable").getElementsByTagName("tbody")[0];
         const newRow = table.insertRow();
+        newRow.setAttribute("data-id", newId);
         newRow.innerHTML = `
           <td><input type="checkbox" class="extract-checkbox" onchange="updateExtractionButtonVisibility()" /></td>
-          <td contenteditable="true">${reitName}</td>
-          <td><a href="${reitUrl}" target="_blank">${reitUrl}</a></td>
-          <td>${
-            q1Link
-              ? `<a href="${q1Link}" target="_blank" title="Simulated saved report">Q1 Financial Report</a>`
-              : ""
-          }</td>
-          <td>${
-            q2Link
-              ? `<a href="${q2Link}" target="_blank" title="Simulated saved report">Q2 Financial Report</a>`
-              : ""
-          }</td>
-          <td>${
-            q3Link
-              ? `<a href="${q3Link}" target="_blank" title="Simulated saved report">Q3 Financial Report</a>`
-              : ""
-          }</td>
-          <td>${
-            q4Link
-              ? `<a href="${q4Link}" target="_blank" title="Simulated saved report">Q4 Financial Report</a>`
-              : ""
-          }</td>
+          <td contenteditable="false">${reitName}</td>
+          <td contenteditable="false"><a href="${reitUrl}" target="_blank">${reitUrl}</a></td>
+          <td contenteditable="false">${reitSector}</td>
+          <td contenteditable="false">${reitFYEnd}</td>
+          <td>${q1Link ? `<a href="${q1Link}" target="_blank">Q1 Report</a>` : ""}</td>
+          <td>${q2Link ? `<a href="${q2Link}" target="_blank">Q2 Report</a>` : ""}</td>
+          <td>${q3Link ? `<a href="${q3Link}" target="_blank">Q3 Report</a>` : ""}</td>
+          <td>${q4Link ? `<a href="${q4Link}" target="_blank">Q4 Report</a>` : ""}</td>
           <td>
             <button class="button" onclick="toggleEditREIT(this)">Edit</button>
             <button class="button" onclick="deleteREIT(this)">Delete</button>
             <button class="button" onclick="toggleUploadForm(this)">Upload Report</button>
-            <div class="upload-form" style="display: none; margin-top: 10px;">
-              <label style="display: inline-block; margin-right: 10px">Select Quarter:</label>
+            <div class="upload-form">
+              <label>Select Quarter:</label>
               <select class="upload-quarter">
                 <option value="Q1">Q1</option>
                 <option value="Q2">Q2</option>
@@ -680,67 +655,154 @@
         closeAddReitModal();
       }
 
-      /* ----------------------------
-         Extraction Button Visibility
-      ---------------------------- */
-      function updateExtractionButtonVisibility() {
-        const checkboxes = document.querySelectorAll(".extract-checkbox");
-        let anyChecked = false;
-        checkboxes.forEach((cb) => {
-          if (cb.checked) anyChecked = true;
+      // --- Scrape REIT Reports Modal Functions ---
+      function openScrapeModal() {
+        const checkboxes = document.querySelectorAll("input.extract-checkbox:checked");
+        if (checkboxes.length === 0) {
+          alert("Please select at least one REIT before scraping.");
+          return;
+        }
+        document.getElementById("scrapeModal").style.display = "flex";
+      }
+      function closeScrapeModal() { document.getElementById("scrapeModal").style.display = "none"; }
+      function confirmScrape() {
+        const quarter = document.getElementById("modalScrapeQuarter").value;
+        const checkboxes = document.querySelectorAll("input.extract-checkbox:checked");
+        if (checkboxes.length === 0) { 
+          alert("No REIT selected for scraping."); 
+          closeScrapeModal(); 
+          return; 
+        }
+        let scrapedData = JSON.parse(localStorage.getItem("scrapedData") || "{}");
+        checkboxes.forEach(cb => {
+          const row = cb.parentElement.parentElement;
+          const id = row.getAttribute("data-id");
+          const reitName = row.cells[1].innerText.trim();
+          const newLink = `<a href="downloads/Scraped_Report_for_${encodeURIComponent(reitName)}_${quarter}.pdf" target="_blank">Scraped ${quarter} Report</a>`;
+          if (!scrapedData[id]) { scrapedData[id] = {}; }
+          scrapedData[id][quarter] = newLink;
+          cb.checked = false;
         });
-        document.getElementById("extractionButtonContainer").style.display =
-          anyChecked ? "block" : "none";
+        localStorage.setItem("scrapedData", JSON.stringify(scrapedData));
+        updateExtractionButtonVisibility();
+        alert("Scraping initiated on the backend. Please refresh the page to see updated reports.");
+        closeScrapeModal();
       }
 
-      /* ----------------------------
-         Edit Mode for Table Rows
-      ---------------------------- */
-      function toggleEditREIT(button) {
-        const row = button.parentElement.parentElement;
-        if (button.textContent === "Edit") {
-          row.classList.add("editing");
-          row.cells[1].setAttribute("contenteditable", "true");
-          button.textContent = "Save";
-        } else {
-          row.classList.remove("editing");
-          row.cells[1].setAttribute("contenteditable", "false");
-          button.textContent = "Edit";
+      // --- Clear Local Storage Function ---
+      function clearLocalStorage() {
+        if (confirm("Are you sure you want to clear all simulated DB storage data?")) {
+          localStorage.clear();
+          location.reload();
         }
       }
 
-      /* ----------------------------
-         Delete REIT
-      ---------------------------- */
+      // --- Annual Report Functions ---
+      function searchAnnualReport() {
+        const spinner = document.getElementById("annualSpinner");
+        spinner.style.display = "block";
+        setTimeout(() => {
+          let extractedMetrics = JSON.parse(localStorage.getItem("extractedMetrics") || "[]");
+          const tableBody = document.getElementById("annualExtractionResultsTable").getElementsByTagName("tbody")[0];
+          tableBody.innerHTML = "";
+          extractedMetrics.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${item.name}</td>
+                             <td>${item.quarter}</td>
+                             <td>${item.committed_occupancy}</td>
+                             <td>${item.retention_rate}</td>
+                             <td>${item.rental_reversion}</td>
+                             <td>${item.wale_nla}</td>
+                             <td>${item.wale_gri}</td>
+                             <td>${item.npi_margin}</td>`;
+            tableBody.appendChild(row);
+          });
+          spinner.style.display = "none";
+        }, 1500);
+      }
+      function extractMetrics() {
+        let extractedMetrics = JSON.parse(localStorage.getItem("extractedMetrics") || "[]");
+        const newMetric = {
+          reit_id: generateId(),
+          name: "New Metric " + new Date().toLocaleTimeString(),
+          quarter: document.getElementById("annualQuarterSelect").value,
+          committed_occupancy: (Math.random() * 100).toFixed(1),
+          retention_rate: (Math.random() * 100).toFixed(1),
+          rental_reversion: (Math.random() * 10 - 5).toFixed(1),
+          wale_nla: (Math.random() * 10).toFixed(1),
+          wale_gri: (Math.random() * 10).toFixed(1),
+          npi_margin: (Math.random() * 100).toFixed(1)
+        };
+        extractedMetrics.push(newMetric);
+        localStorage.setItem("extractedMetrics", JSON.stringify(extractedMetrics));
+        alert("Metrics extraction initiated on the backend. Please refresh the page to see updated metrics.");
+      }
+
+      // --- Edit Mode for REIT Table ---
+      function toggleEditREIT(button) {
+        const row = button.parentElement.parentElement;
+        if (button.innerText.trim() === "Edit") {
+          row.classList.add("editing");
+          // Enable editing for REIT Name
+          row.cells[1].setAttribute("contenteditable", "true");
+          // Remove hyperlink from Base URL to allow editing
+          const baseURL = row.cells[2].innerText.trim();
+          row.cells[2].textContent = baseURL;
+          row.cells[2].setAttribute("contenteditable", "true");
+          // Enable editing for Sector
+          row.cells[3].setAttribute("contenteditable", "true");
+          // Replace Fiscal Year End with a dropdown
+          const currentFY = row.cells[4].innerText.trim();
+          row.cells[4].innerHTML = `<select>
+            <option value="January" ${currentFY==='January'?'selected':''}>January</option>
+            <option value="February" ${currentFY==='February'?'selected':''}>February</option>
+            <option value="March" ${currentFY==='March'?'selected':''}>March</option>
+            <option value="April" ${currentFY==='April'?'selected':''}>April</option>
+            <option value="May" ${currentFY==='May'?'selected':''}>May</option>
+            <option value="June" ${currentFY==='June'?'selected':''}>June</option>
+            <option value="July" ${currentFY==='July'?'selected':''}>July</option>
+            <option value="August" ${currentFY==='August'?'selected':''}>August</option>
+            <option value="September" ${currentFY==='September'?'selected':''}>September</option>
+            <option value="October" ${currentFY==='October'?'selected':''}>October</option>
+            <option value="November" ${currentFY==='November'?'selected':''}>November</option>
+            <option value="December" ${currentFY==='December'?'selected':''}>December</option>
+          </select>`;
+          button.innerText = "Save";
+        } else {
+          row.classList.remove("editing");
+          row.cells[1].setAttribute("contenteditable", "false");
+          const newBaseURL = row.cells[2].innerText.trim();
+          row.cells[2].setAttribute("contenteditable", "false");
+          row.cells[2].innerHTML = `<a href="${newBaseURL}" target="_blank">${newBaseURL}</a>`;
+          row.cells[3].setAttribute("contenteditable", "false");
+          const selectEl = row.cells[4].querySelector("select");
+          const selectedFY = selectEl.value;
+          row.cells[4].textContent = selectedFY;
+          button.innerText = "Edit";
+        }
+      }
       function deleteREIT(button) {
         if (confirm("Are you sure you want to delete this REIT?")) {
           const row = button.parentElement.parentElement;
           row.parentElement.removeChild(row);
-          updateExtractionResultsTable();
-          updateExtractionButtonVisibility();
         }
       }
 
-      /* ----------------------------
-         Upload Form in Table Rows
-      ---------------------------- */
+      // --- Upload Report Functions ---
       function toggleUploadForm(button) {
-        const cell = button.parentElement;
-        const uploadForm = cell.querySelector(".upload-form");
-        Array.from(cell.children).forEach((child) => {
-          if (!child.classList.contains("upload-form"))
-            child.style.display = "none";
-        });
-        uploadForm.style.display = "inline-block";
+        // Use closest() to get the TD containing the upload form
+        const td = button.closest("td");
+        const uploadForm = td.querySelector(".upload-form");
+        // Toggle display as block so the entire form is visible
+        if (uploadForm.style.display === "block") {
+          uploadForm.style.display = "none";
+        } else {
+          uploadForm.style.display = "block";
+        }
       }
       function cancelUpload(button) {
         const uploadForm = button.parentElement;
-        const cell = uploadForm.parentElement;
         uploadForm.style.display = "none";
-        Array.from(cell.children).forEach((child) => {
-          if (!child.classList.contains("upload-form"))
-            child.style.display = "inline-block";
-        });
         const statusEl = uploadForm.querySelector(".upload-status");
         statusEl.style.display = "none";
         statusEl.textContent = "";
@@ -763,12 +825,10 @@
         statusEl.textContent = "Uploading...";
         setTimeout(() => {
           const fileName = fileInput.files[0].name;
-          const newLinkHTML = `<a href="downloads/Annual_Report_for_${encodeURIComponent(
-            fileName
-          )}.pdf" download="Annual_Report_for_${fileName}.pdf" title="Simulated saved report">${fileName}</a>`;
-          const quarterMapping = { Q1: 3, Q2: 4, Q3: 5, Q4: 6 };
+          const newLinkHTML = `<a href="downloads/Scraped_Report_for_${encodeURIComponent(fileName)}.pdf" target="_blank">${fileName}</a>`;
+          const quarterMapping = { Q1: 5, Q2: 6, Q3: 7, Q4: 8 };
           const cellIndex = quarterMapping[quarter];
-          const row = uploadForm.parentElement.parentElement;
+          const row = uploadForm.closest("tr");
           row.cells[cellIndex].innerHTML = newLinkHTML;
           button.disabled = false;
           fileInput.disabled = false;
@@ -777,9 +837,7 @@
         }, 2000);
       }
 
-      /* ----------------------------
-         Inline PDF Preview
-      ---------------------------- */
+      // --- PDF Preview Functions ---
       function showPdfPreview(fileUrl) {
         const previewContainer = document.getElementById("pdfPreviewContainer");
         const iframe = document.getElementById("pdfPreviewFrame");
@@ -792,13 +850,9 @@
         iframe.src = "";
         previewContainer.style.display = "none";
       }
-      function previewReport(fileUrl) {
-        showPdfPreview(fileUrl);
-      }
+      function previewReport(fileUrl) { showPdfPreview(fileUrl); }
 
-      /* ----------------------------
-         Filter REITs in the Overview Table
-      ---------------------------- */
+      // --- Filter REIT Table ---
       function filterTable() {
         const input = document.getElementById("reitSearch");
         const filter = input.value.toLowerCase();
@@ -808,143 +862,110 @@
         for (let i = 1; i < trs.length; i++) {
           if (trs[i].id === "noResultRow") continue;
           const tds = trs[i].getElementsByTagName("td");
-          const reitName = tds[1].textContent.toLowerCase();
-          if (reitName.indexOf(filter) > -1) {
-            trs[i].style.display = "";
-            visibleCount++;
-          } else {
-            trs[i].style.display = "none";
-          }
+          const reitName = tds[1].innerText.toLowerCase();
+          if (reitName.indexOf(filter) > -1) { trs[i].style.display = ""; visibleCount++; }
+          else { trs[i].style.display = "none"; }
         }
         let noResultRow = document.getElementById("noResultRow");
-        if (noResultRow) {
-          noResultRow.remove();
-        }
+        if (noResultRow) { noResultRow.remove(); }
         if (visibleCount === 0) {
           noResultRow = table.insertRow();
           noResultRow.id = "noResultRow";
           const cell = noResultRow.insertCell(0);
           cell.colSpan = table.rows[0].cells.length;
-          cell.textContent = "No matching REIT found.";
+          cell.innerText = "No matching REIT found.";
         }
       }
 
-      /* ----------------------------
-         Filter Annual Report Checkboxes
-      ---------------------------- */
-      function filterAnnualReits() {
-        const input = document.getElementById("annualReitSearch");
-        const filter = input.value.toLowerCase();
-        const container = document.getElementById("annualReitContainer");
-        const labels = container.getElementsByTagName("label");
-        for (let i = 0; i < labels.length; i++) {
-          const text = labels[i].textContent.toLowerCase();
-          labels[i].style.display =
-            text.indexOf(filter) > -1 ? "block" : "none";
-        }
-      }
-
-      /* ----------------------------
-         Extraction (Overview Tab)
-      ---------------------------- */
-      function extractSelectedData() {
-        const currentQuarter = document.getElementById("displayQuarter").value;
-        const checkboxes = document.querySelectorAll(".extract-checkbox");
-        checkboxes.forEach((cb) => {
-          if (cb.checked) {
-            const reitName =
-              cb.parentElement.parentElement.cells[1].textContent.trim();
-            if (!extractedResults[reitName]) {
-              extractedResults[reitName] = {};
-            }
-            extractedResults[reitName][currentQuarter] =
-              "Extracted content for " + reitName + " (" + currentQuarter + ")";
-            cb.checked = false;
-          }
-        });
-        updateExtractionButtonVisibility();
-        document.getElementById("extractionResultsSection").style.display =
-          "block";
-        updateExtractionResultsTable();
-      }
-      function updateExtractionResultsTable() {
-        const selectedQuarter = document.getElementById("displayQuarter").value;
-        const tableBody = document
-          .getElementById("extractionResultsTable")
-          .getElementsByTagName("tbody")[0];
-        tableBody.innerHTML = "";
-        const reitRows = document
-          .getElementById("reitTable")
-          .getElementsByTagName("tr");
-        for (let i = 1; i < reitRows.length; i++) {
-          if (reitRows[i].id === "noResultRow") continue;
-          const reitName = reitRows[i].cells[1].textContent.trim();
-          const row = document.createElement("tr");
-          const cellReit = document.createElement("td");
-          cellReit.textContent = reitName;
-          const cellData = document.createElement("td");
-          cellData.textContent =
-            extractedResults[reitName] &&
-            extractedResults[reitName][selectedQuarter]
-              ? extractedResults[reitName][selectedQuarter]
-              : "";
-          row.appendChild(cellReit);
-          row.appendChild(cellData);
-          tableBody.appendChild(row);
-        }
-      }
-
-      /* ----------------------------
-         Annual Report Search & List Results
-      ---------------------------- */
+      // --- Annual Report Functions ---
       function searchAnnualReport() {
-        const container = document.getElementById("annualReitContainer");
-        const checkboxes = container.querySelectorAll(
-          "input[type='checkbox']:checked"
-        );
-        const selectedReits = Array.from(checkboxes).map((cb) => cb.value);
-        const quarter = document.getElementById("annualSelectQuarter").value;
-        console.log(
-          "Searching annual report for",
-          selectedReits,
-          "for quarter",
-          quarter
-        );
-        const previewContainer = document.getElementById("annualReportPreview");
-        previewContainer.innerHTML = "";
-        const indicator = document.createElement("p");
-        indicator.textContent = "Searching...";
-        previewContainer.appendChild(indicator);
+        const spinner = document.getElementById("annualSpinner");
+        spinner.style.display = "block";
         setTimeout(() => {
-          previewContainer.innerHTML = "";
-          if (selectedReits.length === 0) {
-            const noResultMsg = document.createElement("p");
-            noResultMsg.textContent =
-              "No REIT selected. Please select a REIT to search.";
-            previewContainer.appendChild(noResultMsg);
-          } else {
-            let foundAny = false;
-            // Create a list to display results
-            const resultList = document.createElement("ul");
-            resultList.className = "annual-results";
-            selectedReits.forEach((reit) => {
-              // Example: simulate skipping a REIT (e.g., "Mapletree") to show no results
-              if (reit === "Mapletree") return;
-              foundAny = true;
-              const li = document.createElement("li");
-              li.innerHTML = `<a href="downloads/Annual_Report_for_${reit}_${quarter}.pdf" target="_blank" title="Download Annual Report">${reit} ${quarter} Annual Report</a>`;
-              resultList.appendChild(li);
-            });
-            if (foundAny) {
-              previewContainer.appendChild(resultList);
-            } else {
-              const noResultMsg = document.createElement("p");
-              noResultMsg.textContent =
-                "No Annual Report found for the selected REIT(s) and quarter.";
-              previewContainer.appendChild(noResultMsg);
-            }
-          }
+          let extractedMetrics = JSON.parse(localStorage.getItem("extractedMetrics") || "[]");
+          const tableBody = document.getElementById("annualExtractionResultsTable").getElementsByTagName("tbody")[0];
+          tableBody.innerHTML = "";
+          extractedMetrics.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${item.name}</td>
+                             <td>${item.quarter}</td>
+                             <td>${item.committed_occupancy}</td>
+                             <td>${item.retention_rate}</td>
+                             <td>${item.rental_reversion}</td>
+                             <td>${item.wale_nla}</td>
+                             <td>${item.wale_gri}</td>
+                             <td>${item.npi_margin}</td>`;
+            tableBody.appendChild(row);
+          });
+          spinner.style.display = "none";
         }, 1500);
+      }
+      function extractMetrics() {
+        let extractedMetrics = JSON.parse(localStorage.getItem("extractedMetrics") || "[]");
+        const newMetric = {
+          reit_id: generateId(),
+          name: "New Metric " + new Date().toLocaleTimeString(),
+          quarter: document.getElementById("annualQuarterSelect").value,
+          committed_occupancy: (Math.random() * 100).toFixed(1),
+          retention_rate: (Math.random() * 100).toFixed(1),
+          rental_reversion: (Math.random() * 10 - 5).toFixed(1),
+          wale_nla: (Math.random() * 10).toFixed(1),
+          wale_gri: (Math.random() * 10).toFixed(1),
+          npi_margin: (Math.random() * 100).toFixed(1)
+        };
+        extractedMetrics.push(newMetric);
+        localStorage.setItem("extractedMetrics", JSON.stringify(extractedMetrics));
+        alert("Metrics extraction initiated on the backend. Please refresh the page to see updated metrics.");
+      }
+      
+      // --- Edit Mode for REIT Table ---
+      function toggleEditREIT(button) {
+        const row = button.parentElement.parentElement;
+        if (button.innerText.trim() === "Edit") {
+          row.classList.add("editing");
+          // Enable editing for REIT Name
+          row.cells[1].setAttribute("contenteditable", "true");
+          // Remove hyperlink from Base URL to allow editing
+          const baseURL = row.cells[2].innerText.trim();
+          row.cells[2].textContent = baseURL;
+          row.cells[2].setAttribute("contenteditable", "true");
+          // Enable editing for Sector
+          row.cells[3].setAttribute("contenteditable", "true");
+          // Replace Fiscal Year End with dropdown
+          const currentFY = row.cells[4].innerText.trim();
+          row.cells[4].innerHTML = `<select>
+            <option value="January" ${currentFY==='January'?'selected':''}>January</option>
+            <option value="February" ${currentFY==='February'?'selected':''}>February</option>
+            <option value="March" ${currentFY==='March'?'selected':''}>March</option>
+            <option value="April" ${currentFY==='April'?'selected':''}>April</option>
+            <option value="May" ${currentFY==='May'?'selected':''}>May</option>
+            <option value="June" ${currentFY==='June'?'selected':''}>June</option>
+            <option value="July" ${currentFY==='July'?'selected':''}>July</option>
+            <option value="August" ${currentFY==='August'?'selected':''}>August</option>
+            <option value="September" ${currentFY==='September'?'selected':''}>September</option>
+            <option value="October" ${currentFY==='October'?'selected':''}>October</option>
+            <option value="November" ${currentFY==='November'?'selected':''}>November</option>
+            <option value="December" ${currentFY==='December'?'selected':''}>December</option>
+          </select>`;
+          button.innerText = "Save";
+        } else {
+          row.classList.remove("editing");
+          row.cells[1].setAttribute("contenteditable", "false");
+          const newBaseURL = row.cells[2].innerText.trim();
+          row.cells[2].setAttribute("contenteditable", "false");
+          row.cells[2].innerHTML = `<a href="${newBaseURL}" target="_blank">${newBaseURL}</a>`;
+          row.cells[3].setAttribute("contenteditable", "false");
+          const selectEl = row.cells[4].querySelector("select");
+          const selectedFY = selectEl.value;
+          row.cells[4].textContent = selectedFY;
+          button.innerText = "Edit";
+        }
+      }
+      function deleteREIT(button) {
+        if (confirm("Are you sure you want to delete this REIT?")) {
+          const row = button.parentElement.parentElement;
+          row.parentElement.removeChild(row);
+        }
       }
     </script>
   </body>
