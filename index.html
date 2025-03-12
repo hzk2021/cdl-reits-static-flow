@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>REIT Reports Dashboard</title>
+  <title>SREIT Reports Dashboard</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -283,11 +283,11 @@
   <button id="clearStorageButton" class="button" onclick="clearLocalStorage()">Clear Local Storage</button>
   
   <div class="container">
-    <h1>REIT Reports Dashboard</h1>
+    <h1>SREIT Reports Dashboard</h1>
     <!-- Tab Navigation -->
     <div class="tab-nav">
-      <button id="btnOverview" class="active" onclick="showTab('overview')">REITs Overview</button>
-      <button id="btnAnnual" onclick="showTab('annual')">Annual Report</button>
+      <button id="btnOverview" class="active" onclick="showTab('overview')">SREITs Management</button>
+      <button id="btnAnnual" onclick="showTab('annual')">Extracted Metrics</button>
     </div>
 
     <!-- REITs Overview Tab -->
@@ -429,12 +429,12 @@
           <option value="2023 Q4">2023 Q4</option>
         </select>
         <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center;">
-          <button class="button" onclick="searchAnnualReport()">Search Annual Report</button>
+          <button class="button" onclick="searchAnnualReport()">Get Metrics</button>
           <button class="button" onclick="extractMetrics()">Extract Metrics</button>
         </div>
       </div>
       <div class="card" id="annualExtractionSection">
-        <h2>Extracted Annual Report Metrics</h2>
+        <h2>Extracted Quarterly Report Metrics</h2>
         <!-- Spinner placed above the metrics table -->
         <div id="annualSpinner" class="spinner"></div>
         <div class="table-responsive">
@@ -442,6 +442,7 @@
             <thead>
               <tr>
                 <th>REIT</th>
+                <th>Sector</th>
                 <th>Quarter</th>
                 <th>Committed Occupancy</th>
                 <th>Retention Rate</th>
