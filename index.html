@@ -294,8 +294,15 @@
     <div id="tabOverview" class="tab-content active">
       <!-- Search Container: Input and Add REIT button -->
       <div class="search-container" style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="flex: 1; margin-right: 10px;">
+        <div style="flex: 1; margin-right: 10px; display: flex; gap: 10px;">
           <input type="text" id="reitSearch" placeholder="Search REIT by name..." onkeyup="filterTable()" />
+          <select id="yearFilter" onchange="filterTable()">
+            <option value="">All Years</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+          </select>
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
           <button class="button" onclick="openAddReitModal()">Add REIT</button>
@@ -856,19 +863,36 @@
       // --- Filter REIT Table ---
       function filterTable() {
         const input = document.getElementById("reitSearch");
+        const yearFilter = document.getElementById("yearFilter");
         const filter = input.value.toLowerCase();
+        const selectedYear = yearFilter.value;
         const table = document.getElementById("reitTable");
         const trs = table.getElementsByTagName("tr");
         let visibleCount = 0;
+
         for (let i = 1; i < trs.length; i++) {
           if (trs[i].id === "noResultRow") continue;
           const tds = trs[i].getElementsByTagName("td");
           const reitName = tds[1].innerText.toLowerCase();
-          if (reitName.indexOf(filter) > -1) { trs[i].style.display = ""; visibleCount++; }
-          else { trs[i].style.display = "none"; }
+          const reportYear = tds[5].innerText || tds[6].innerText || tds[7].innerText || tds[8].innerText; // Check Q1–Q4 cells for year
+
+          // Filter by name and year
+          const nameMatch = reitName.indexOf(filter) > -1;
+          const yearMatch = selectedYear === "" || reportYear.includes(selectedYear);
+
+          if (nameMatch && yearMatch) {
+            trs[i].style.display = "";
+            visibleCount++;
+          } else {
+            trs[i].style.display = "none";
+          }
         }
+
+        // Show "No matching REIT found" message if no rows are visible
         let noResultRow = document.getElementById("noResultRow");
-        if (noResultRow) { noResultRow.remove(); }
+        if (noResultRow) {
+          noResultRow.remove();
+        }
         if (visibleCount === 0) {
           noResultRow = table.insertRow();
           noResultRow.id = "noResultRow";
